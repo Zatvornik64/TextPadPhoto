@@ -1,9 +1,9 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { recipeReducer } from './reducers/recipeReducer';
+import { itemsReducer } from './reducers/itemsReducer';
 
 const rootReducer = combineReducers({
-    cooking: recipeReducer
+    textpadphoto: itemsReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

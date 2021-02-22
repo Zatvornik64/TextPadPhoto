@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, Image, Button, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, Button, TextInput, Alert, FlatList, LogBox } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { THEME } from '../theme'
-import { RecipeHeaderIcons } from '../components/RecipeHeaderIcons'
-import { removeRecipes, updateRecipes } from '../redux/actions/recipeActions'
+import { ItemHeaderIcons } from '../components/ItemHeaderIcons'
+import { removeItems, updateItems } from '../redux/actions/itemsActions'
 import { PhotoPiker } from '../components/PhotoPiker'
+import { PhotoItem } from '../components/PhotoItem'
 
-export const RecipeScreen = ({ navigation, route }) => {
-  const recipe = route.params.recipe; 
-  const [title, setTitle] = useState(recipe.title);
-  const [ingredients, setIngredients] = useState(recipe.ingredients);
-  const [cooking, setCooking] = useState(recipe.cooking);
-  const [booked, setBooked] = useState(recipe.booked);
-  const [image, setImage] = useState(recipe.img);
-  const id = recipe.id;
-
+export const ItemScreen = ({ navigation, route }) => {
+  LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
+  const items = route.params.item; 
+  const [title, setTitle] = useState(items.title);
+  //const [ingredients, setIngredients] = useState(recipe.ingredients);
+  //const [cooking, setCooking] = useState(recipe.cooking);
+  const [text, setText] = useState(items.text);
+  const [booked, setBooked] = useState(items.booked);
+  const [image, setImage] = useState(items.img);
+  const id = items.id;
+//console.log(image)
   const dispatch = useDispatch();
 
   useEffect(()=>{
     navigation.setOptions({
-      headerRight: () => ( <RecipeHeaderIcons navigation={navigation} booked={booked} setBookedHandler={setBookedHandler} /> ),
+      headerRight: () => ( <ItemHeaderIcons navigation={navigation} booked={booked} setBookedHandler={setBookedHandler} /> ),
     })
   }, [booked])
   
@@ -32,7 +35,7 @@ export const RecipeScreen = ({ navigation, route }) => {
   const removeHandler = () => {
     Alert.alert(
       "Удаление",
-      "Точно удалить рецепт?",
+      "Точно удалить запись?",
       [
         {
           text: "Отменить",
@@ -41,7 +44,7 @@ export const RecipeScreen = ({ navigation, route }) => {
         { text: "Удалить", 
           style: "destructive",
           onPress: () => {
-            dispatch(removeRecipes(id));
+            dispatch(removeItems(id));
             navigation.goBack();
           }
         }
@@ -51,22 +54,33 @@ export const RecipeScreen = ({ navigation, route }) => {
   }
 
   const saveHandler = () => {
-    const recipe = { 
+    const item = { 
       id,
       title,
-      cooking,
       booked,
-      ingredients,
+      text,
       img: image,
     };
-    dispatch(updateRecipes(recipe));
+    dispatch(updateItems(item));
     navigation.goBack();
+  }
+
+  const deletePhotoHandler = (id) => {
+    return function () {
+      const temp = [...image];
+      temp.splice(id, 1);
+      setImage(temp);  
+    }
+  }
+
+  const addImage = (uri) => {
+    setImage([...image, uri]);
   }
 
   return (
     <ScrollView>
       <View style={styles.textWrap}>
-        <Text style={styles.title}>Название</Text>
+        <Text style={styles.title}>Заголовок</Text>
         <TextInput 
           style={styles.text}
           onChangeText={text => setTitle(text)} 
@@ -74,23 +88,14 @@ export const RecipeScreen = ({ navigation, route }) => {
         />
       </View>
       {/*<Image source={{ uri: image }} style={styles.image} />*/}
-      <PhotoPiker img={image} onPick={uri => setImage(uri)}/>
+      <PhotoPiker onPick={uri => addImage(uri)}/>
       <View style={styles.textWrap}>
-        <Text style={styles.title}>Состав</Text>
+        <Text style={styles.title}>Текст</Text>
         <TextInput 
           style={styles.text}
           multiline={true}
-          onChangeText={text => setIngredients(text)} 
-          value={ingredients} 
-        />
-      </View>
-      <View style={styles.textWrap}>
-        <Text style={styles.title}>Рецепт</Text>
-        <TextInput 
-          style={styles.text}
-          multiline={true}
-          onChangeText={text => setCooking(text)} 
-          value={cooking} 
+          onChangeText={text => setText(text)} 
+          value={text} 
         />
       </View>
       <View style={styles.buttonsWrapper}>
@@ -112,12 +117,17 @@ export const RecipeScreen = ({ navigation, route }) => {
       <View style={styles.buttonsWrapper}>
         <View style={styles.button}> 
           <Button
-            title='Удалить'
+            title='Удалить запись'
             color={THEME.DANGER_COLOR}
             onPress={removeHandler}
           />
         </View>
       </View>
+      <FlatList
+        data={image}
+        keyExtractor={item => item}
+        renderItem={(item, i) => <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>}
+      />
     </ScrollView> 
   )
 }

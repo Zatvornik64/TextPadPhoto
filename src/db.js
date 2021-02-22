@@ -1,13 +1,13 @@
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('recipes.db')
+const db = SQLite.openDatabase('textpadphoto.db')
 
 export class DB {
     static init () {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'CREATE TABLE IF NOT EXISTS recipes (id INTEGER PRIMARY KEY NOT NULL, img TEXT, title TEXT, ingredients TEXT, cooking TEXT, booked INTEGER )',
+                    'CREATE TABLE IF NOT EXISTS textpadphoto (id INTEGER PRIMARY KEY NOT NULL, img TEXT, title TEXT, text TEXT, booked INTEGER )',
                     [],
                     resolve,
                     (_, error) => reject(error)
@@ -16,11 +16,11 @@ export class DB {
         })
     };
 
-    static getRecipes () {
+    static getItems () {
         return new Promise ((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'SELECT * FROM recipes',
+                    'SELECT * FROM textpadphoto',
                     [],
                     (_, result) => resolve(result.rows._array),
                     (_, error) => reject(error)
@@ -29,12 +29,12 @@ export class DB {
         })
     }
 
-    static createRecipe ({ img, title, ingredients, cooking, booked }) {
+    static createItems ({ img, title, text, booked }) {
         return new Promise ((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'INSERT INTO recipes (img, title, ingredients, cooking, booked) VALUES ( ?, ?, ?, ?, ? )',
-                    [ img, title, ingredients, cooking, booked ],
+                    'INSERT INTO textpadphoto (img, title, text, booked) VALUES ( ?, ?, ?, ? )',
+                    [ img, title, text, booked ],
                     (_, result) => resolve(result.insertId),
                     (_, error) => reject(error)
                 )
@@ -42,12 +42,12 @@ export class DB {
         })
     }
 
-    static updateRecipe ({ id, img, title, ingredients, cooking, booked }) {
+    static updateItems ({ id, img, title, text, booked }) {
         return new Promise ((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'UPDATE recipes SET img = ?, title = ?, ingredients = ?, cooking = ?, booked=? WHERE id = ?',
-                    [ img, title, ingredients, cooking, booked, id ],
+                    'UPDATE textpadphoto SET img = ?, title = ?, text = ?, booked=? WHERE id = ?',
+                    [ img, title, text, booked, id ],
                     resolve,
                     (_, error) => reject(error)
                 )
@@ -55,12 +55,11 @@ export class DB {
         })
     }
 
-    static removeRecipe ( id ) {
-
+    static removeItems ( id ) {
         return new Promise ((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'DELETE FROM recipes WHERE id = ?',
+                    'DELETE FROM textpadphoto WHERE id = ?',
                     [ id ],
                     resolve,
                     (_, error) => reject(error)

@@ -17,8 +17,9 @@ async function askPermission () {
     return true
 }
 
-export const PhotoPiker = ({img, onPick}) => {
-    const [image, setImage] = useState(img);
+export const PhotoPiker = ({onPick}) => {
+    //const [image, setImage] = useState(img);
+    
     const takePhoto = async () => {
         const hasPermissions = await askPermission();
         if (!hasPermissions) { return }
@@ -27,17 +28,23 @@ export const PhotoPiker = ({img, onPick}) => {
             allowsEditing: false,
             aspect: [16, 9],
         });
-        //console.log(img)
-        setImage(img.uri);
         onPick(img.uri);
     }
 
     return (
         <View style={styles.wrapper}>
-            {image && <Image style={styles.image} source={{ uri: image }} />}
+            {/*image && 
+                <>
+                    <Image style={styles.image} source={{ uri: item }} />
+                    <Button 
+                        title={'Удалить фото'} 
+                        color={THEME.MAIN_COLOR}
+                        onPress={delPhotoHandler} 
+                    />
+                </>*/}
             <View style={styles.button}>
                 <Button 
-                    title={image ? 'Изменить фото' : 'Сделать фото'} 
+                    title={'Сделать фото'} 
                     color={THEME.MAIN_COLOR}
                     onPress={takePhoto} 
                 />

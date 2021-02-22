@@ -1,4 +1,4 @@
-export const LOAD_RECIPE = 'LOAD_RECIPE';
-export const CREATE_RECIPE = 'CREATE_RECIPE';
-export const REMOVE_RECIPE = 'REMOVE_RECIPE';
-export const UPDATE_RECIPE = 'UPDATE_RECIPE';
+export const LOAD_ITEMS = 'LOAD_ITEMS';
+export const CREATE_ITEMS = 'CREATE_ITEMS';
+export const REMOVE_ITEMS = 'REMOVE_ITEMS';
+export const UPDATE_ITEMS = 'UPDATE_ITEMS';

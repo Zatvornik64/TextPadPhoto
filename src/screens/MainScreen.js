@@ -1,9 +1,9 @@
 import React, { useEffect }  from 'react'
 import { View,  StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { Recipe } from '../components/Recipe'
+import { ItemBlock } from '../components/ItemBlock'
 import { MainHeaderIcons } from '../components/MainHeaderIcons'
-import { loadRecipes } from '../redux/actions/recipeActions'
+import { loadItems } from '../redux/actions/itemsActions'
 import { THEME } from '../theme'
 
 
@@ -11,20 +11,26 @@ import { THEME } from '../theme'
 export const MainScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
-  const onOpen = recipe => {
-    navigation.navigate('Recipe', { recipe } ) 
+  const onOpen = item => {
+    navigation.navigate('Item', { item } ) 
   }
 
   useEffect(()=>{
     navigation.setOptions({
       headerRight: () => ( <MainHeaderIcons navigation={navigation} /> ),
     });
-    dispatch(loadRecipes())
+    dispatch(loadItems())
   }, [dispatch])
   
-  const recipes = useSelector(state => state.cooking.recipes);
-  recipes.sort((a,b) => b.id - a.id);
-  const loading = useSelector(state => state.cooking.loading);
+  const items = useSelector(state => state.textpadphoto.items);
+  
+  if (items) {
+    items.forEach(item => {
+     if (typeof item.img === "string") item.img = JSON.parse(item.img)
+    });
+  }
+  items.sort((a,b) => b.id - a.id);
+  const loading = useSelector(state => state.textpadphoto.loading);
 
   if (loading) {
     return (
@@ -34,7 +40,7 @@ export const MainScreen = ({ navigation }) => {
     )
   }
 
-  if (!recipes.length) {
+  if (!items.length) {
     return (
       <View style={styles.loader}>
         <Image 
@@ -49,9 +55,9 @@ export const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.wrapper}>
       <FlatList
-        data={recipes}
-        keyExtractor={recipe => recipe.id.toString()}
-        renderItem={({ item }) => <Recipe recipe={item} onOpen={onOpen} />}
+        data={items}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => <ItemBlock item={item} onOpen={onOpen} />}
       /> 
     </View>
   )

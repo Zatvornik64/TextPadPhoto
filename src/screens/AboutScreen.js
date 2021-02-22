@@ -4,10 +4,10 @@ import { View, Text, StyleSheet } from 'react-native'
 export const AboutScreen = ({}) => {
   return (
     <View style={styles.center}>
-      <Text style={styles.text}>Это приложение для записи рецептов.</Text>
-      <Text style={styles.text}>Звездочка на главном экране в шапке переключает показ всех или только избранных рецептов.</Text>
-      <Text style={styles.text}>Звездочка в редакторе рецепта переключает его статус на "избранный" или "не избранный".</Text>
-      <Text style={styles.text}>Плюсик в шапке приложения переключает на страницу добавления нового рецепта.</Text>
+      <Text style={styles.text}>Это приложение для записей с фото.</Text>
+      <Text style={styles.text}>Звездочка на главном экране в шапке переключает показ всех или только избранных записей.</Text>
+      <Text style={styles.text}>Звездочка в редакторе переключает его статус на "избранный" или "не избранный".</Text>
+      <Text style={styles.text}>Плюсик в шапке приложения переключает на страницу добавления новой записи.</Text>
       <Text style={styles.text}>Шестеренка в шапке ведет на этот экран.</Text>
       <Text style={styles.text}>Это приложение делалось для себя.</Text>
       <Text style={styles.text}>Автор: Михаил Пошивалов.</Text>

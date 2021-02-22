@@ -5,7 +5,7 @@ import { THEME } from '../theme'
 
 import { MainScreen } from '../screens/MainScreen'
 import { BookedScreen } from '../screens/BookedScreen'
-import { RecipeScreen } from '../screens/RecipeScreen'
+import { ItemScreen } from '../screens/ItemScreen'
 import { CreateScreen } from '../screens/CreateScreen'
 import { AboutScreen } from '../screens/AboutScreen'
 
@@ -38,10 +38,10 @@ function RootStack() {
         },  }}
       />
       <Stack.Screen
-        name="Recipe"
-        component={RecipeScreen}
+        name="Item"
+        component={ItemScreen}
         options={{ 
-          title: 'Рецепт',
+          title: 'Запись',
           headerStyle: {
             backgroundColor: THEME.HEADER_BACKGROUND
         },  }}

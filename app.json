@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Книга рецептов",
-    "slug": "CookingPad",
+    "name": "Блокнот с фото",
+    "slug": "TextPadPhoto",
     "privacy": "public", 
     "version": "1.0.1",
     "orientation": "portrait",
@@ -18,7 +18,7 @@
       "**/*"
     ],
     "android": {
-      "package": "com.github.Zatvornik64.Cooking",
+      "package": "com.github.Zatvornik64.TextPadPhoto",
       "versionCode": 1
     }, 
     "web": {

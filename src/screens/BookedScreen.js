@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { View,  StyleSheet, FlatList, Image } from 'react-native'
 import { useSelector } from 'react-redux'
-import { Recipe } from '../components/Recipe'
+import { ItemBlock } from '../components/ItemBlock'
 import { BookedHeaderIcons } from '../components/BookedHeaderIcons'
 
 export const BookedScreen = ({ navigation }) => {
 
-  const onOpen = recipe => {
-    navigation.navigate('Recipe', { recipe } ) 
+  const onOpen = item => {
+    navigation.navigate('Item', { item } ) 
   }
 
   useEffect(() => {
@@ -16,10 +16,10 @@ export const BookedScreen = ({ navigation }) => {
     });
   }, [])
   
-  const recipes = useSelector(state => state.cooking.recipes);
-  recipes.sort((a,b) => b.id - a.id);
+  const items = useSelector(state => state.textpadphoto.items);
+  items.sort((a,b) => b.id - a.id);
 
-  if (!recipes.filter(item => item.booked).length) {
+  if (!items.filter(item => item.booked).length) {
     return (
       <View style={styles.loader}>
         <Image 
@@ -33,9 +33,9 @@ export const BookedScreen = ({ navigation }) => {
   return (
     <View style={styles.wrapper}>
       <FlatList
-        data={recipes.filter(item => item.booked)}
-        keyExtractor={recipe => recipe.id.toString()}
-        renderItem={({ item }) => <Recipe recipe={item} onOpen={onOpen} />}
+        data={items.filter(item => item.booked)}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => <ItemBlock item={item} onOpen={onOpen} />}
       /> 
     </View>
   )

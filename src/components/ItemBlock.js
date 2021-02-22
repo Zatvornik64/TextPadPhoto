@@ -1,14 +1,14 @@
 import React from 'react'
 import { View, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native'
 
-export const Recipe = ({ recipe, onOpen }) => {
+export const ItemBlock = ({ item, onOpen }) => {
   return (
     <View style={styles.wrapper}>
-      <TouchableOpacity activeOpacity={0.7} onPress={() => onOpen(recipe)}> 
-      <ImageBackground style={styles.image} source={recipe.img ? { uri: recipe.img } : require('../../assets/noimage.png')}>
+      <TouchableOpacity activeOpacity={0.7} onPress={() => onOpen(item)}> 
+      <ImageBackground style={styles.image} source={item.img[0] ? { uri: item.img[0] } : require('../../assets/noimage.png')}>
         <View style={styles.textWrap}>
           <Text style={styles.title}>
-            {recipe.title}
+            {item.title}
           </Text>
         </View>
       </ImageBackground>

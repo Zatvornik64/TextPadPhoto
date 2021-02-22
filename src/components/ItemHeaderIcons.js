@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
     navigation.navigate('About') 
   }
 
-export const RecipeHeaderIcons = ({ navigation, booked, setBookedHandler }) => {
+export const ItemHeaderIcons = ({ navigation, booked, setBookedHandler }) => {
 
     return (
         <View style={styles.headerButtonsWrapper}>
