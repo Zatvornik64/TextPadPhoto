@@ -16,17 +16,19 @@ export const loadItems = () => {
 
 export const updateItems = items => async dispatch => {
     let imagesList = [];
+    //console.log(items)
     items.img.forEach(async image => {
         const tempFileName = image.split('/').pop();
         const newFileName = FileSystem.documentDirectory + tempFileName;
         imagesList.push(newFileName);
-        try {
-            await FileSystem.moveAsync({
-                to: newFileName,
-                from: image,
-            })
-        } catch (e) { console.log('Ошибка перемещени картинки - ' + e) }
-     })
+        if (image.split("/").includes('cache')) {
+            try {
+                await FileSystem.moveAsync({
+                    to: newFileName,
+                    from: image,
+                })
+            } catch (e) { console.log('Ошибка перемещени картинки - ' + e) }
+        }})
     
     const payload = {...items, img: JSON.stringify(imagesList)};
     try {
@@ -38,10 +40,24 @@ export const updateItems = items => async dispatch => {
     })
 }
 
-export const removeItems = id => async dispatch => {
+export const deleteImg = img => async dispatch => {
     try {
-        await DB.removeItems(id)
+        await FileSystem.deleteAsync(img)
+    } catch (e) { console.log('Ошибка удаления картинки - ' + e) }
+}
+
+export const removeItems = item => async dispatch => {
+    try {
+        await DB.removeItems(item.id)
     } catch (e) {console.log('Ошибка удаления из базы - ' + e)}
+
+    item.img.forEach(async element => {
+        if (element.split("/").includes('files')) {
+            try {
+                await FileSystem.deleteAsync(element)
+            } catch (e) { console.log('Ошибка удаления картинки - ' + e) }
+        }})
+
     dispatch ({
         type: REMOVE_ITEMS,
         payload: id

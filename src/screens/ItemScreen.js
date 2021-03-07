@@ -3,21 +3,18 @@ import { View, Text, StyleSheet, ScrollView, Image, Button, TextInput, Alert, Fl
 import { useDispatch } from 'react-redux'
 import { THEME } from '../theme'
 import { ItemHeaderIcons } from '../components/ItemHeaderIcons'
-import { removeItems, updateItems } from '../redux/actions/itemsActions'
+import { removeItems, updateItems, deleteImg } from '../redux/actions/itemsActions'
 import { PhotoPiker } from '../components/PhotoPiker'
 import { PhotoItem } from '../components/PhotoItem'
 
 export const ItemScreen = ({ navigation, route }) => {
-  LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
+  //LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
   const items = route.params.item; 
   const [title, setTitle] = useState(items.title);
-  //const [ingredients, setIngredients] = useState(recipe.ingredients);
-  //const [cooking, setCooking] = useState(recipe.cooking);
   const [text, setText] = useState(items.text);
   const [booked, setBooked] = useState(items.booked);
   const [image, setImage] = useState(items.img);
   const id = items.id;
-//console.log(image)
   const dispatch = useDispatch();
 
   useEffect(()=>{
@@ -44,7 +41,7 @@ export const ItemScreen = ({ navigation, route }) => {
         { text: "Удалить", 
           style: "destructive",
           onPress: () => {
-            dispatch(removeItems(id));
+            dispatch(removeItems(items));
             navigation.goBack();
           }
         }
@@ -68,7 +65,18 @@ export const ItemScreen = ({ navigation, route }) => {
   const deletePhotoHandler = (id) => {
     return function () {
       const temp = [...image];
-      temp.splice(id, 1);
+      const img = temp.splice(id, 1)[0];
+      if (img.split("/").includes('files')) {
+        dispatch(deleteImg(img));
+        const item = { 
+          id,
+          title,
+          booked,
+          text,
+          img: temp,
+        };
+        dispatch(updateItems(item));
+      }
       setImage(temp);  
     }
   }
@@ -123,11 +131,19 @@ export const ItemScreen = ({ navigation, route }) => {
           />
         </View>
       </View>
-      <FlatList
-        data={image}
-        keyExtractor={item => item}
-        renderItem={(item, i) => <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>}
-      />
+        {/*<FlatList
+          data={image}
+          keyExtractor={item => item}
+          renderItem={(item, i) => <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>}
+        />*/}
+        {image.map((item, i) => {
+          //console.log(item)
+          return (
+            <View key={item}>
+              <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>
+            </View>
+          )
+        })}
     </ScrollView> 
   )
 }

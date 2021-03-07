@@ -5,15 +5,15 @@ import * as Permissions from 'expo-permissions';
 import { View, StyleSheet, Image, Button, Alert } from 'react-native';
 import { THEME } from '../theme';
 
-export const PhotoItem = ({image, deletePhoto}) => {
+export const PhotoItem = ({image, deletePhoto, id}) => {
 //console.log(image)
     return (
         <View style={styles.wrapper}>
-            <Image style={styles.image} source={{ uri: image.item }} />
+            <Image style={styles.image} source={{ uri: image }} />
             <Button 
                 title={'Удалить фото'} 
                 color={THEME.MAIN_COLOR}
-                onPress={deletePhoto(image.index)} 
+                onPress={deletePhoto(id)} 
             />
         </View>
     )
