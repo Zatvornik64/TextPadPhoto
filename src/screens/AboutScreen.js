@@ -12,6 +12,7 @@ export const AboutScreen = ({}) => {
       <Text style={styles.text}>Это приложение делалось для себя.</Text>
       <Text style={styles.text}>Автор: Михаил Пошивалов.</Text>
       <Text style={styles.text}>Если у вас есть пожелания по дальнейшей доработке этого приложения - позвоните автору и скажите об этом!</Text>
+      <Text style={styles.version}>v.1.0.2</Text>
     </View>
   )
 }
@@ -26,6 +27,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginBottom: 5,
+    textAlign: 'center'
+  },
+  version: {
+    fontSize: 12,
+    position: 'absolute',
+    bottom: 40,
     textAlign: 'center'
   }
 })

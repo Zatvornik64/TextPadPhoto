@@ -16,7 +16,7 @@ export const ItemScreen = ({ navigation, route }) => {
   const [image, setImage] = useState(items.img);
   const id = items.id;
   const dispatch = useDispatch();
-
+//console.log("image: ", image)
   useEffect(()=>{
     navigation.setOptions({
       headerRight: () => ( <ItemHeaderIcons navigation={navigation} booked={booked} setBookedHandler={setBookedHandler} /> ),
@@ -62,11 +62,10 @@ export const ItemScreen = ({ navigation, route }) => {
     navigation.goBack();
   }
 
-  const deletePhotoHandler = (id) => {
-    return function () {
+  const deletePhotoHandler = (imageId) => {
       const temp = [...image];
-      const img = temp.splice(id, 1)[0];
-      if (img.split("/").includes('files')) {
+      const img = temp.splice(imageId, 1)[0];
+      //if (img.split("/").includes('files')) {
         dispatch(deleteImg(img));
         const item = { 
           id,
@@ -76,12 +75,12 @@ export const ItemScreen = ({ navigation, route }) => {
           img: temp,
         };
         dispatch(updateItems(item));
-      }
+      //}
       setImage(temp);  
-    }
   }
 
   const addImage = (uri) => {
+    //console.log(uri)
     setImage([...image, uri]);
   }
 

@@ -34,6 +34,7 @@ export const updateItems = items => async dispatch => {
     try {
         await DB.updateItems(payload);
     } catch(e) {console.log('Ошибка обновления базы - ' + e)}
+    //console.log("update: ", payload)
     dispatch ({
         type: UPDATE_ITEMS,
         payload: payload
@@ -52,15 +53,15 @@ export const removeItems = item => async dispatch => {
     } catch (e) {console.log('Ошибка удаления из базы - ' + e)}
 
     item.img.forEach(async element => {
-        if (element.split("/").includes('files')) {
+        //if (element.split("/").includes('files')) {
             try {
                 await FileSystem.deleteAsync(element)
             } catch (e) { console.log('Ошибка удаления картинки - ' + e) }
-        }})
+        })
 
     dispatch ({
         type: REMOVE_ITEMS,
-        payload: id
+        payload: item.id
     })
 }
 

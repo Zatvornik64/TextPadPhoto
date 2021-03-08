@@ -28,6 +28,7 @@ export const PhotoPiker = ({onPick}) => {
             allowsEditing: false,
             aspect: [16, 9],
         });
+        //console.log(img)
         onPick(img.uri);
     }
 

@@ -7,13 +7,34 @@ import { THEME } from '../theme';
 
 export const PhotoItem = ({image, deletePhoto, id}) => {
 //console.log(image)
+
+const removeHandler = () => {
+    Alert.alert(
+      "Удаление",
+      "Точно удалить фото?",
+      [
+        {
+          text: "Отменить",
+          style: "cancel"
+        },
+        { text: "Удалить", 
+          style: "destructive",
+          onPress: () => {
+            deletePhoto(id);
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  }
+
     return (
         <View style={styles.wrapper}>
             <Image style={styles.image} source={{ uri: image }} />
             <Button 
                 title={'Удалить фото'} 
                 color={THEME.MAIN_COLOR}
-                onPress={deletePhoto(id)} 
+                onPress={removeHandler} 
             />
         </View>
     )

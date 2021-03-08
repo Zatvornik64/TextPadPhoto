@@ -23,6 +23,7 @@ export const MainScreen = ({ navigation }) => {
   }, [dispatch])
   
   const items = useSelector(state => state.textpadphoto.items);
+  //console.log("items: ", items)
   
   if (items) {
     items.forEach(item => {

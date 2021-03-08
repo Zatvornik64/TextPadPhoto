@@ -3,12 +3,13 @@ import { View, Text, StyleSheet, ScrollView, Image, Button, TextInput, Alert, Fl
 import { useDispatch } from 'react-redux'
 import { THEME } from '../theme'
 import { CreateHeaderIcons } from '../components/CreateHeaderIcons'
+import { deleteImg } from '../redux/actions/itemsActions'
 import { createItems } from '../redux/actions/itemsActions'
 import { PhotoPiker } from '../components/PhotoPiker'
 import { PhotoItem } from '../components/PhotoItem'
 
 export const CreateScreen = ({ navigation }) => {
-  LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
+  //LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
   //const recipe = route.params.recipe; 
   const [title, setTitle] = useState('');
@@ -42,10 +43,11 @@ export const CreateScreen = ({ navigation }) => {
     navigation.goBack();
   }
 
-  const deletePhotoHandler = (id) => {
-    return function () {
-      setImage(image.splice(1, id));  
-    }
+  const deletePhotoHandler = (imageId) => {
+    const temp = [...image];
+    const img = temp.splice(imageId, 1)[0];
+    dispatch(deleteImg(img));
+    setImage(temp);  
   }
 
   const addImage = (uri) => {
@@ -89,11 +91,19 @@ export const CreateScreen = ({ navigation }) => {
         </View>
       </View>
       <View>
-      <FlatList
+      {/*<FlatList
         data={image}
         keyExtractor={i => i}
         renderItem={(item, i) => <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>}
-      />
+      />*/}
+      {image.map((item, i) => {
+          //console.log(item)
+          return (
+            <View key={i}>
+              <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>
+            </View>
+          )
+        })}
       </View>
     </ScrollView> 
   )
