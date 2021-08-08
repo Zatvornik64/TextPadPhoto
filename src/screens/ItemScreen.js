@@ -27,7 +27,15 @@ export const ItemScreen = ({ navigation, route }) => {
     navigation.goBack()
   }
   const setBookedHandler = () => {
-    setBooked(booked? 0 : 1)
+    setBooked(booked? 0 : 1);
+    const item = { 
+      id,
+      title: items.title,
+      booked: booked? 0 : 1,
+      text: items.text,
+      img: items.img,
+    };
+    dispatch(updateItems(item));
   }
   const removeHandler = () => {
     Alert.alert(
