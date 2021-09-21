@@ -6,9 +6,9 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import { THEME } from '../theme';
 import * as Sharing from 'expo-sharing';
 
-export const PhotoItem = ({image, deletePhoto, id}) => {
+export const PhotoItem = ({item, image, deletePhoto, id}) => {
 //console.log(image)
-const images = [{ url: image, }];
+const images = image.map(el => ({url: el}));
 //console.log(images)
 const [modalVisible, setModalVisible] = useState(false);
 
@@ -21,7 +21,7 @@ const removeHandler = () => {
           text: "Отменить",
           style: "cancel"
         },
-        { text: "Удалить", 
+        { text: "Удалить",
           style: "destructive",
           onPress: () => {
             deletePhoto(id);
@@ -33,32 +33,38 @@ const removeHandler = () => {
   }
 
 const sharingHandler = () => {
-  Sharing.shareAsync(image)
+  Sharing.shareAsync(item)
+}
+
+const modalOnHandler = () => {
+  setModalVisible(true)
+}
+
+const modalOffHandler = () => {
+  setModalVisible(!modalVisible)
 }
 
     return (
-        <TouchableWithoutFeedback activeOpacity={0.7} onPress={() => setModalVisible(true)} onLongPress={sharingHandler} style={styles.wrapper}>
+        <TouchableWithoutFeedback activeOpacity={0.7} onPress={modalOnHandler} onLongPress={sharingHandler} style={styles.wrapper}>
             <View>
-              <Image style={styles.image} source={{ uri: image }} />
-              <Button 
-                  title={'Поделиться фото'} 
+              <Image style={styles.image} source={{ uri: item }} />
+              <Button
+                  title={'Поделиться фото'}
                   color={THEME.SHARED_COLOR}
-                  onPress={sharingHandler} 
+                  onPress={sharingHandler}
               />
-              <Button 
-                  title={'Удалить фото'} 
+              <Button
+                  title={'Удалить фото'}
                   color={THEME.MAIN_COLOR}
-                  onPress={removeHandler} 
+                  onPress={removeHandler}
               />
               <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                  setModalVisible(!modalVisible);
-                }}
+                onRequestClose={modalOffHandler}
               >
-                  <ImageViewer imageUrls={images} />
+                  <ImageViewer imageUrls={images} index={id} saveToLocalByLongPress={false}/>
               </Modal>
             </View>
         </TouchableWithoutFeedback>

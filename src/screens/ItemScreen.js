@@ -9,7 +9,7 @@ import { PhotoItem } from '../components/PhotoItem'
 
 export const ItemScreen = ({ navigation, route }) => {
   //LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
-  const items = route.params.item; 
+  const items = route.params.item;
   const [title, setTitle] = useState(items.title);
   const [text, setText] = useState(items.text);
   const [booked, setBooked] = useState(items.booked);
@@ -22,13 +22,13 @@ export const ItemScreen = ({ navigation, route }) => {
       headerRight: () => ( <ItemHeaderIcons navigation={navigation} booked={booked} setBookedHandler={setBookedHandler} /> ),
     })
   }, [booked])
-  
+
   const goBackHandler = () => {
     navigation.goBack()
   }
   const setBookedHandler = () => {
     setBooked(booked? 0 : 1);
-    const item = { 
+    const item = {
       id,
       title: items.title,
       booked: booked? 0 : 1,
@@ -46,7 +46,7 @@ export const ItemScreen = ({ navigation, route }) => {
           text: "Отменить",
           style: "cancel"
         },
-        { text: "Удалить", 
+        { text: "Удалить",
           style: "destructive",
           onPress: () => {
             dispatch(removeItems(items));
@@ -59,7 +59,7 @@ export const ItemScreen = ({ navigation, route }) => {
   }
 
   const saveHandler = () => {
-    const item = { 
+    const item = {
       id,
       title,
       booked,
@@ -75,7 +75,7 @@ export const ItemScreen = ({ navigation, route }) => {
       const img = temp.splice(imageId, 1)[0];
       //if (img.split("/").includes('files')) {
         dispatch(deleteImg(img));
-        const item = { 
+        const item = {
           id,
           title,
           booked,
@@ -84,11 +84,11 @@ export const ItemScreen = ({ navigation, route }) => {
         };
         dispatch(updateItems(item));
       //}
-      setImage(temp);  
+      setImage(temp);
   }
 
   const addImage = (uri) => {
-    //console.log(uri)
+    //console.log("uri: ", uri)
     setImage([...image, uri]);
   }
 
@@ -96,21 +96,21 @@ export const ItemScreen = ({ navigation, route }) => {
     <ScrollView>
       <View style={styles.textWrap}>
         <Text style={styles.title}>Заголовок</Text>
-        <TextInput 
+        <TextInput
           style={styles.text}
-          onChangeText={text => setTitle(text)} 
-          value={title} 
+          onChangeText={setTitle}
+          value={title}
         />
       </View>
       {/*<Image source={{ uri: image }} style={styles.image} />*/}
-      <PhotoPiker onPick={uri => addImage(uri)}/>
+      <PhotoPiker onPick={addImage}/>
       <View style={styles.textWrap}>
         <Text style={styles.title}>Текст</Text>
-        <TextInput 
+        <TextInput
           style={styles.text}
           multiline={true}
-          onChangeText={text => setText(text)} 
-          value={text} 
+          onChangeText={setText}
+          value={text}
         />
       </View>
       <View style={styles.buttonsWrapper}>
@@ -130,7 +130,7 @@ export const ItemScreen = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.buttonsWrapper}>
-        <View style={styles.button}> 
+        <View style={styles.button}>
           <Button
             title='Удалить запись'
             color={THEME.DANGER_COLOR}
@@ -147,11 +147,11 @@ export const ItemScreen = ({ navigation, route }) => {
           //console.log(item)
           return (
             <View key={item}>
-              <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>
+              <PhotoItem item={item} image={image} deletePhoto={deletePhotoHandler} id={i}/>
             </View>
           )
         })}
-    </ScrollView> 
+    </ScrollView>
   )
 }
 
@@ -167,12 +167,12 @@ const styles = StyleSheet.create({
   },
   textWrap: {
     padding: 10
-  }, 
+  },
   title: {
     fontSize: 20
   },
   text: {
-    borderColor: 'gray', 
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
