@@ -100,7 +100,7 @@ export const CreateScreen = ({ navigation }) => {
           //console.log(item)
           return (
             <View key={i}>
-              <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>
+              <PhotoItem item={item} image={image} deletePhoto={deletePhotoHandler} id={i}/>
             </View>
           )
         })}

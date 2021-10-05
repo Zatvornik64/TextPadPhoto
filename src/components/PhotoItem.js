@@ -7,9 +7,7 @@ import { THEME } from '../theme';
 import * as Sharing from 'expo-sharing';
 
 export const PhotoItem = ({item, image, deletePhoto, id}) => {
-//console.log(image)
 const images = image.map(el => ({url: el}));
-//console.log(images)
 const [modalVisible, setModalVisible] = useState(false);
 
 const removeHandler = () => {
