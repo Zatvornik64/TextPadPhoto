@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Блокнот с фото",
+    "name": "Фото Блокнот",
     "slug": "TextPadPhoto",
     "privacy": "public", 
-    "version": "1.1.2",
+    "version": "1.1.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
