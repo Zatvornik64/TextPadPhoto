@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#eee"
+      "backgroundColor": "#FFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -19,7 +19,11 @@
     ],
     "android": {
       "package": "com.github.Zatvornik64.TextPadPhoto",
-      "versionCode": 1
+      "versionCode": 1,
+      "adaptiveIcon": { 
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#87CEFA" 
+      }
     }, 
     "web": {
       "favicon": "./assets/favicon.png"
