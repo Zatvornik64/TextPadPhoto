@@ -11,13 +11,10 @@ import { PhotoItem } from '../components/PhotoItem'
 export const CreateScreen = ({ navigation }) => {
   //LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
-  //const recipe = route.params.recipe; 
   const [title, setTitle] = useState('');
-  //const [ingredients, setIngredients] = useState('');
-  //const [cooking, setCooking] = useState('');
   const [text, setText] = useState('');
-  //const [booked, setBooked] = useState(0);
   const [image, setImage] = useState([]);
+  const [pikerVisible, setPikerVisible] = useState(false);
 
   const dispatch = useDispatch();
 //console.log(image)
@@ -55,7 +52,9 @@ export const CreateScreen = ({ navigation }) => {
   }
 
   return (
-    <ScrollView>
+    <>
+    <ScrollView >
+      <View style={pikerVisible? styles.pikerVisible : styles.pikerNotVisible}>
       <View style={styles.textWrap}>
         <Text style={styles.title}>Заголовок</Text>
         <TextInput 
@@ -64,7 +63,12 @@ export const CreateScreen = ({ navigation }) => {
           value={title} 
         />
       </View>
-      <PhotoPiker onPick={uri => addImage(uri)}/>
+      <Button
+            title='Сделать фото'
+            color={THEME.MAIN_COLOR}
+            onPress={()=>setPikerVisible(true)}
+      />
+      
       <View style={styles.textWrap}>
         <Text style={styles.title}>Текст</Text>
         <TextInput 
@@ -90,12 +94,11 @@ export const CreateScreen = ({ navigation }) => {
           />
         </View>
       </View>
+      </View>
+      {pikerVisible && 
+        <PhotoPiker onPick={addImage} setPikerVisible={setPikerVisible}/>
+      }
       <View>
-      {/*<FlatList
-        data={image}
-        keyExtractor={i => i}
-        renderItem={(item, i) => <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>}
-      />*/}
       {image.map((item, i) => {
           //console.log(item)
           return (
@@ -105,7 +108,8 @@ export const CreateScreen = ({ navigation }) => {
           )
         })}
       </View>
-    </ScrollView> 
+    </ScrollView>
+    </>
   )
 }
 
@@ -143,5 +147,11 @@ const styles = StyleSheet.create({
   },
   buttons: {
     width: '40%'
+  },
+  pikerVisible: {
+    opacity: 0.3,
+  },
+  pikerNotVisible: {
+    opacity: 1,
   }
 })

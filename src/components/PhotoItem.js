@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 import { View, StyleSheet, Image, Button, Alert, TouchableWithoutFeedback, Modal } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { THEME } from '../theme';

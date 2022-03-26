@@ -14,6 +14,7 @@ export const ItemScreen = ({ navigation, route }) => {
   const [text, setText] = useState(items.text);
   const [booked, setBooked] = useState(items.booked);
   const [image, setImage] = useState(items.img);
+  const [pikerVisible, setPikerVisible] = useState(false);
   const id = items.id;
   const dispatch = useDispatch();
 //console.log("image: ", image)
@@ -88,12 +89,13 @@ export const ItemScreen = ({ navigation, route }) => {
   }
 
   const addImage = (uri) => {
-    //console.log("uri: ", uri)
     setImage([...image, uri]);
   }
 
   return (
     <ScrollView>
+      
+      <View style={pikerVisible? styles.pikerVisible : styles.pikerNotVisible}>
       <View style={styles.textWrap}>
         <Text style={styles.title}>Заголовок</Text>
         <TextInput
@@ -102,8 +104,11 @@ export const ItemScreen = ({ navigation, route }) => {
           value={title}
         />
       </View>
-      {/*<Image source={{ uri: image }} style={styles.image} />*/}
-      <PhotoPiker onPick={addImage}/>
+      <Button
+            title='Сделать фото'
+            color={THEME.MAIN_COLOR}
+            onPress={()=>setPikerVisible(true)}
+      />
       <View style={styles.textWrap}>
         <Text style={styles.title}>Текст</Text>
         <TextInput
@@ -138,16 +143,15 @@ export const ItemScreen = ({ navigation, route }) => {
           />
         </View>
       </View>
-        {/*<FlatList
-          data={image}
-          keyExtractor={item => item}
-          renderItem={(item, i) => <PhotoItem image={item} deletePhoto={deletePhotoHandler} id={i}/>}
-        />*/}
+      </View>
+      {pikerVisible && 
+        <PhotoPiker onPick={addImage} setPikerVisible={setPikerVisible}/>
+      }
         {image.map((item, i) => {
           //console.log(item)
           return (
-            <View key={item}>
-              <PhotoItem item={item} image={image} deletePhoto={deletePhotoHandler} id={i}/>
+            <View key={item} style={pikerVisible? styles.pikerVisible : styles.pikerNotVisible}>
+              <PhotoItem item={item} image={image} deletePhoto={deletePhotoHandler} id={i} />
             </View>
           )
         })}
@@ -189,5 +193,11 @@ const styles = StyleSheet.create({
   },
   buttons: {
     width: '40%'
+  },
+  pikerVisible: {
+    opacity: 0.3,
+  },
+  pikerNotVisible: {
+    opacity: 1,
   }
 })
