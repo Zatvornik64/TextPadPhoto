@@ -16,7 +16,7 @@ export const AboutScreen = ({}) => {
         <Text style={styles.text}>Автор: Михаил Пошивалов.</Text>
         <Text style={styles.text}>Если у вас есть пожелания по дальнейшей доработке этого приложения - позвоните автору и скажите об этом!</Text>
       </ScrollView>
-      <Text style={styles.version}>v.1.1.4</Text>
+      <Text style={styles.version}>v.1.1.5</Text>
     </View>
   )
 }

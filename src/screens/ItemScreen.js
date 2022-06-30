@@ -6,6 +6,7 @@ import { ItemHeaderIcons } from '../components/ItemHeaderIcons'
 import { removeItems, updateItems, deleteImg } from '../redux/actions/itemsActions'
 import { PhotoPiker } from '../components/PhotoPiker'
 import { PhotoItem } from '../components/PhotoItem'
+import { galeryPiker } from '../components/galeryPiker'
 
 export const ItemScreen = ({ navigation, route }) => {
   //LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
@@ -104,11 +105,18 @@ export const ItemScreen = ({ navigation, route }) => {
           value={title}
         />
       </View>
-      <Button
-            title='Сделать фото'
-            color={THEME.MAIN_COLOR}
-            onPress={()=>setPikerVisible(true)}
-      />
+      <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+        <Button
+              title='Записать с камеры'
+              color={THEME.MAIN_COLOR}
+              onPress={()=>setPikerVisible(true)}
+        />
+        <Button
+                title='Записать с галереи'
+                color={THEME.MAIN_COLOR}
+                onPress={()=>galeryPiker(addImage)}
+          />
+      </View>
       <View style={styles.textWrap}>
         <Text style={styles.title}>Текст</Text>
         <TextInput
