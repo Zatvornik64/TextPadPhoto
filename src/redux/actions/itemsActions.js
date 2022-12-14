@@ -1,5 +1,6 @@
 import { LOAD_ITEMS, REMOVE_ITEMS, UPDATE_ITEMS, CREATE_ITEMS } from "../types";
 import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 import { DB } from "../../db";
 
 export const loadItems = () => {
@@ -15,36 +16,23 @@ export const loadItems = () => {
 }
 
 export const updateItems = items => async dispatch => {
-    let imagesList = [];
-    //console.log(items)
-    items.img.forEach(async image => {
-        const tempFileName = image.split('/').pop();
-        const newFileName = FileSystem.documentDirectory + tempFileName;
-        imagesList.push(newFileName);
-        if (image.split("/").includes('cache')) {
-            try {
-                await FileSystem.moveAsync({
-                    to: newFileName,
-                    from: image,
-                })
-            } catch (e) { console.log('Ошибка перемещени картинки - ' + e) }
-        }})
+    const permission = await MediaLibrary.requestPermissionsAsync();
+    if (permission.granted) {
+        const imagesList = await saveToMedia(items);
     
     const payload = {...items, img: JSON.stringify(imagesList)};
     try {
         await DB.updateItems(payload);
     } catch(e) {console.log('Ошибка обновления базы - ' + e)}
-    //console.log("update: ", payload)
     dispatch ({
         type: UPDATE_ITEMS,
         payload: payload
     })
-}
+}}
 
 export const deleteImg = img => async dispatch => {
-    try {
-        await FileSystem.deleteAsync(img)
-    } catch (e) { console.log('Ошибка удаления картинки - ' + e) }
+    await deteleFromMedia(img)
+    //await FileSystem.deleteAsync(img)
 }
 
 export const removeItems = item => async dispatch => {
@@ -52,12 +40,10 @@ export const removeItems = item => async dispatch => {
         await DB.removeItems(item.id)
     } catch (e) {console.log('Ошибка удаления из базы - ' + e)}
 
-    item.img.forEach(async element => {
-        //if (element.split("/").includes('files')) {
-            try {
-                await FileSystem.deleteAsync(element)
-            } catch (e) { console.log('Ошибка удаления картинки - ' + e) }
-        })
+    for (const img of item.img) {
+        await deteleFromMedia(img)
+        //await FileSystem.deleteAsync(img)
+    }
 
     dispatch ({
         type: REMOVE_ITEMS,
@@ -66,26 +52,57 @@ export const removeItems = item => async dispatch => {
 }
 
 export const createItems = items => async dispatch => {
-    let imagesList = [];
-    items.img.forEach(async image => {
-        const tempFileName = image.split('/').pop();
-        const newFileName = FileSystem.documentDirectory + tempFileName;
-        imagesList.push(newFileName);
+    const permission = await MediaLibrary.requestPermissionsAsync();
+    if (permission.granted) {
+        const imagesList = await saveToMedia(items);
+
+        const payload = {...items, img: JSON.stringify(imagesList)};
+        const id = await DB.createItems(payload);
+        payload.id = id;
+        dispatch ({
+            type: CREATE_ITEMS,
+            payload
+        })
+    }
+}
+
+async function saveToMedia (items) {
+    let result = [];
+    for (const image of items.img) {
         try {
-            await FileSystem.moveAsync({
-                to: newFileName,
-                from: image,
+            const tempFileName = image.split('/').pop();
+            const asset = await MediaLibrary.createAssetAsync(image);
+            const album = await MediaLibrary.getAlbumAsync("TextPadPhoto");
+            if (!album) {
+                await MediaLibrary.createAlbumAsync("TextPadPhoto", asset, true);
+            } else {
+                await MediaLibrary.addAssetsToAlbumAsync(asset, album, true);
+            }
+            if (image.split("/").includes('cache')) await FileSystem.deleteAsync(image)
+            const assets = await MediaLibrary.getAssetsAsync({album: album})
+            assets.assets.forEach(el => {
+                const elFileName = el.uri.split('/').pop();
+                if (elFileName === tempFileName) {
+                    result.push(el.uri);
+                }
             })
-        } catch (e) { console.log('Ошибка перемещени картинки - ' + e) }
-     })
-    
-    const payload = {...items, img: JSON.stringify(imagesList)};
-    
-    const id = await DB.createItems(payload);
-    payload.id = id;
-    //console.log(payload)
-    dispatch ({
-        type: CREATE_ITEMS,
-        payload
-    })
+            
+            } catch (error) {
+                console.log(error);
+            }}
+        return result;
+}
+
+async function deteleFromMedia (img) {
+    try {
+        const fileName = img.split('/').pop();
+        const album = await MediaLibrary.getAlbumAsync("TextPadPhoto");
+        const assets = await MediaLibrary.getAssetsAsync({album: album})
+        assets.assets.forEach(el => {
+            const elFileName = el.uri.split('/').pop();
+            if (elFileName === fileName) {
+                MediaLibrary.deleteAssetsAsync(el);
+            }
+        })
+    } catch (e) { console.log('Ошибка удаления картинки - ' + e) }
 }

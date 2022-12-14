@@ -3,7 +3,7 @@
     "name": "Фото Блокнот",
     "slug": "TextPadPhoto",
     "privacy": "public", 
-    "version": "1.1.4",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -27,6 +27,16 @@
     }, 
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Запрос на фото.",
+          "savePhotosPermission": "Запрос на сохранение.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ]
   }
 }
