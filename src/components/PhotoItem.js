@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, Button, Alert, TouchableWithoutFeedback, Modal
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { THEME } from '../theme';
 import * as Sharing from 'expo-sharing';
+import { saveItems } from '../redux/actions/itemsActions';
 
 export const PhotoItem = ({item, image, deletePhoto, id}) => {
 const images = image.map(el => ({url: el}));
@@ -40,10 +41,19 @@ const modalOffHandler = () => {
   setModalVisible(!modalVisible)
 }
 
+const saveHandler = () => {
+  saveItems(item)
+}
+
     return (
         <TouchableWithoutFeedback activeOpacity={0.7} onPress={modalOnHandler} onLongPress={sharingHandler} style={styles.wrapper}>
             <View>
               <Image style={styles.image} source={{ uri: item }} />
+              <Button
+                  title={'Сохранить фото'}
+                  color={THEME.SAVE_COLOR}
+                  onPress={saveHandler}
+              />
               <Button
                   title={'Поделиться фото'}
                   color={THEME.SHARED_COLOR}
