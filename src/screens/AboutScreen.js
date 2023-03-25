@@ -12,13 +12,12 @@ export const AboutScreen = ({}) => {
         <Text style={styles.text}>При просмотре записи нажатие на фото откроет его для детального просмотра.</Text>
         <Text style={styles.text}>При просмотре записи через длинное нажатие на фото или кнопку "поделиться" можно отправить фотографию через доступные мессенджеры.</Text>
         <Text style={styles.text}>Шестеренка в шапке ведет на этот экран.</Text>
-        <Text style={styles.text}>Фотографии хранятся в папке Pictures/TextPadPhoto и их можно перенести при смене телефона.</Text>
-        <Text style={styles.text}>При удалении фотографии запрашивается подтверждение - это особенность новых андроидов.</Text>
+        <Text style={styles.text}>Сохраненные фотографии хранятся в папке Pictures/TextPadPhoto и их можно перенести при смене телефона.</Text>
         <Text style={styles.text}>Это приложение делалось для себя.</Text>
         <Text style={styles.text}>Автор: Михаил Пошивалов.</Text>
         <Text style={styles.text}>Если у вас есть пожелания по дальнейшей доработке этого приложения - позвоните автору и скажите об этом!</Text>
       </ScrollView>
-      <Text style={styles.version}>v.1.3.0</Text>
+      <Text style={styles.version}>v.1.4.0</Text>
     </View>
   )
 }

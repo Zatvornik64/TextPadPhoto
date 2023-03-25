@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Button, Alert, TouchableWithoutFeedback, Modal } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, Alert, TouchableWithoutFeedback, Modal } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { THEME } from '../theme';
 import * as Sharing from 'expo-sharing';
@@ -8,6 +8,8 @@ import { saveItems } from '../redux/actions/itemsActions';
 export const PhotoItem = ({item, image, deletePhoto, id}) => {
 const images = image.map(el => ({url: el}));
 const [modalVisible, setModalVisible] = useState(false);
+const [saveResult, setSaveResult] = useState('');
+const [showResult, setShowResult] = useState(false);
 
 const removeHandler = () => {
     Alert.alert(
@@ -41,9 +43,17 @@ const modalOffHandler = () => {
   setModalVisible(!modalVisible)
 }
 
-const saveHandler = () => {
-  saveItems(item)
-}
+function saveHandler () {
+  try {
+    saveItems(item);
+    setSaveResult('Сохранено')
+  } catch (error) {
+    console.log(error);
+    setSaveResult('Ошибка')
+  }
+  setShowResult(true);
+  setTimeout(() => setShowResult(false), 5000);
+  }
 
     return (
         <TouchableWithoutFeedback activeOpacity={0.7} onPress={modalOnHandler} onLongPress={sharingHandler} style={styles.wrapper}>
@@ -64,6 +74,9 @@ const saveHandler = () => {
                   color={THEME.MAIN_COLOR}
                   onPress={removeHandler}
               />
+              {showResult && <Text style={styles.result}>
+                  {saveResult}
+              </Text>}
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -90,4 +103,10 @@ const styles = StyleSheet.create({
         width: '60%',
         marginLeft: '20%'
     },
+    result: {
+      marginTop: 0,
+      fontSize: 40,
+      backgroundColor: '#00FF00',
+      textAlign: 'center',
+    }
 })
