@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Button, Alert, TouchableWithoutFeedback, Modal } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, Alert, TouchableWithoutFeedback, Modal, TouchableOpacity } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { THEME } from '../theme';
 import * as Sharing from 'expo-sharing';
+import { AntDesign } from '@expo/vector-icons';
 import { saveItems } from '../redux/actions/itemsActions';
 
 export const PhotoItem = ({item, image, deletePhoto, id}) => {
@@ -59,21 +60,17 @@ function saveHandler () {
         <TouchableWithoutFeedback activeOpacity={0.7} onPress={modalOnHandler} onLongPress={sharingHandler} style={styles.wrapper}>
             <View>
               <Image style={styles.image} source={{ uri: item }} />
-              <Button
-                  title={'Сохранить фото'}
-                  color={THEME.SAVE_COLOR}
-                  onPress={saveHandler}
-              />
-              <Button
-                  title={'Поделиться фото'}
-                  color={THEME.SHARED_COLOR}
-                  onPress={sharingHandler}
-              />
-              <Button
-                  title={'Удалить фото'}
-                  color={THEME.MAIN_COLOR}
-                  onPress={removeHandler}
-              />
+              <View style={styles.buttons}>
+                <TouchableOpacity style={styles.actionButton} onPress={saveHandler} >
+                    <AntDesign name="save" size={40} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton} onPress={sharingHandler} >
+                    <AntDesign name="sharealt" size={40} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton} onPress={removeHandler} >
+                    <AntDesign name="delete" size={40} color="black" />
+                </TouchableOpacity>
+              </View>
               {showResult && <Text style={styles.result}>
                   {saveResult}
               </Text>}
@@ -106,7 +103,27 @@ const styles = StyleSheet.create({
     result: {
       marginTop: 0,
       fontSize: 40,
+      width: '100%',
       backgroundColor: '#00FF00',
       textAlign: 'center',
+      position: 'absolute',
+      borderRadius: 5,
+      bottom: 0
+    },
+    buttons: {
+      flexDirection: 'row',
+      alignItems: 'stretch',
+      marginTop: 5,
+      marginBottom: 5,
+    },
+    actionButton: {
+      width: '25%',
+      height: 40,
+      backgroundColor: THEME.BUTTONS_COLOR,
+      margin: 'auto',
+      marginLeft: '5%',
+      alignItems: 'center',
+      textAlign: 'center',
+      borderRadius: 10,
     }
 })
